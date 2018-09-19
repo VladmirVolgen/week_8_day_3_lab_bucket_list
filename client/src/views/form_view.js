@@ -15,7 +15,6 @@ FormView.prototype.handleSubmit = function (e) {
   e.preventDefault();
   const newListItem = this.createElement(e.target);
   PubSub.publish('FormView:submitted', newListItem);
-  console.log(newListItem);
   e.target.reset();
 };
 

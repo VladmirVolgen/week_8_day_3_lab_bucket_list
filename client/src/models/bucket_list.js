@@ -14,13 +14,20 @@ BucketList.prototype.bindEvents = function () {
   });
   PubSub.subscribe('ListItemView:delete-clicked', (e) => {
     this.deleteData(e.detail);
+  });
+  PubSub.subscribe('ListItemView:edit-completed', (e) => {
+    // const id = e.detail.data._id;
+    // const item = {name: e.detail.data.name, completed: e.detail.data.completed}
+    // console.log('e.detail:', e.detail);
+    // console.log('id', id);
+    // console.log('item', item);
+    this.updateData(e);
   })
 };
 
 BucketList.prototype.getData = function () {
   this.request.get()
     .then((list) => {
-      console.log(list);
       PubSub.publish('BucketList:data-loaded', list);
     })
     .catch(console.error);
@@ -42,7 +49,19 @@ BucketList.prototype.deleteData = function (id) {
       PubSub.publish('BucketList:data-loaded', list)
     })
     .catch(console.error);
-    console.log(id);
+};
+
+BucketList.prototype.updateData = function (e) {
+  const id = e.detail.data._id;
+  const item = {"completed": e.detail.data.completed}
+  console.log('id:', id);
+  console.log('item:', item);
+
+  this.request.put(id, item)
+    .then((list) => {
+      PubSub.publish('BucketList:data-loaded', list);
+    })
+    .catch(console.error);
 };
 
 module.exports = BucketList;

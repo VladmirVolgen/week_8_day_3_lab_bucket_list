@@ -25,7 +25,7 @@ ListView.prototype.renderList = function (ul) {
   this.list.forEach((listItem) => {
     let item = new ListItemView(listItem, ul);
     item.render();
-    // render function for listItem
+
   })
 };
 

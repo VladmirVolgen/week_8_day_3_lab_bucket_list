@@ -15,7 +15,10 @@ ListItemView.prototype.render = function () {
     completed = "Not Completed"
   }
   createAndAppend('span', 'box', completed, li);
-  this.createDeleteButton(li)
+
+  this.createEditOption(li);
+  this.createDeleteButton(li);
+
 };
 
 ListItemView.prototype.createDeleteButton = function (parent) {
@@ -25,9 +28,23 @@ ListItemView.prototype.createDeleteButton = function (parent) {
   button.addEventListener('click', (e) => {
     PubSub.publish('ListItemView:delete-clicked', e.target.value);
 
-  })
-
+  });
 };
+
+  ListItemView.prototype.createEditOption = function (parent) {
+    const select = createAndAppend('select', null, '', parent);
+    const option1 = createAndAppend('option', null, 'Yes', select);
+    const option2 = createAndAppend('option', null, 'No', select);
+    option1.value = true;
+    option2.value = false;
+
+    select.addEventListener('change', (e) => {
+      console.log(this);
+      PubSub.publish('ListItemView:edit-completed', this);
+
+    });
+  };
+
 
 
 module.exports = ListItemView;

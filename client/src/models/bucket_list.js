@@ -2,8 +2,9 @@ const PubSub = require('../helpers/pub_sub.js');
 const Request = require('../helpers/request.js');
 
 const BucketList = function (url) {
-  this.url = url
-  this.listItem = []
+  this.url = url;
+  this.listItem = [];
+  this.items = [];
   this.request = new Request(this.url)
 };
 
@@ -16,11 +17,6 @@ BucketList.prototype.bindEvents = function () {
     this.deleteData(e.detail);
   });
   PubSub.subscribe('ListItemView:edit-completed', (e) => {
-    // const id = e.detail.data._id;
-    // const item = {name: e.detail.data.name, completed: e.detail.data.completed}
-    // console.log('e.detail:', e.detail);
-    // console.log('id', id);
-    // console.log('item', item);
     this.updateData(e);
   })
 };
@@ -28,7 +24,8 @@ BucketList.prototype.bindEvents = function () {
 BucketList.prototype.getData = function () {
   this.request.get()
     .then((list) => {
-      PubSub.publish('BucketList:data-loaded', list);
+      this.items = list
+      PubSub.publish('BucketList:data-loaded', this.items);
     })
     .catch(console.error);
 };
@@ -36,7 +33,8 @@ BucketList.prototype.getData = function () {
 BucketList.prototype.postData = function (item) {
   this.request.post(item)
     .then((list) => {
-      PubSub.publish('BucketList:data-loaded', list)
+      this.items = list
+      PubSub.publish('BucketList:data-loaded', this.items)
     })
     .catch(console.error);
 };
@@ -46,20 +44,23 @@ BucketList.prototype.deleteData = function (id) {
   this.request.delete(id)
 
     .then((list) => {
+      this.items = list;
       PubSub.publish('BucketList:data-loaded', list)
     })
     .catch(console.error);
 };
 
-BucketList.prototype.updateData = function (e) {
-  const id = e.detail.data._id;
-  const item = {"completed": e.detail.data.completed}
-  console.log('id:', id);
-  console.log('item:', item);
+BucketList.prototype.updateData = function (data) {
+  const id = data.detail[0];
+  const atributes = { completed: data.detail[1] };
+  // console.log('id:', id);
+  // console.log('atributes:', atributes);
 
-  this.request.put(id, item)
+  this.request.put(id, atributes)
     .then((list) => {
-      PubSub.publish('BucketList:data-loaded', list);
+      console.log('list', list);
+      this.items = list;
+      PubSub.publish('BucketList:data-loaded', this.items);
     })
     .catch(console.error);
 };

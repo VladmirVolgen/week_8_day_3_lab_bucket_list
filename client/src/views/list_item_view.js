@@ -9,12 +9,20 @@ const ListItemView = function (data, container) {
 ListItemView.prototype.render = function () {
   const li = createAndAppend('li', null, this.data.name , this.container )
   let completed = []
-  if (this.data.completed) {
-    completed = "Completed"
-  } else {
-    completed = "Not Completed"
-  }
-  createAndAppend('span', 'box', completed, li);
+  console.log(this.data.completed);
+  // if (this.data.completed === true || "true") {
+  //   completed = "Completed"
+  // } else if (this.data.completed === false || "false") {
+  //   completed = "Not Completed"
+  // }
+
+  // if (!this.data.completed || completed === "false") {
+  //   completed = "Not completed";
+  // } else {
+  //   completed = "Completed";
+  // }
+  console.log(completed);
+  createAndAppend('span', 'box', this.data.completed , li);
 
   this.createEditOption(li);
   this.createDeleteButton(li);
@@ -33,14 +41,18 @@ ListItemView.prototype.createDeleteButton = function (parent) {
 
   ListItemView.prototype.createEditOption = function (parent) {
     const select = createAndAppend('select', null, '', parent);
-    const option1 = createAndAppend('option', null, 'Yes', select);
-    const option2 = createAndAppend('option', null, 'No', select);
-    option1.value = true;
-    option2.value = false;
+    const option3 = createAndAppend('option', null, '', select);
+    option3.selected = true;
+    option3.disabled = true;
+    const option1 = createAndAppend('option', null, 'Completed', select);
+    const option2 = createAndAppend('option', null, 'Not completed', select);
+    option1.value = "Completed";
+    option2.value = "Not completed";
 
     select.addEventListener('change', (e) => {
-      console.log(this);
-      PubSub.publish('ListItemView:edit-completed', this);
+      console.log('target.value', e.target.value);
+      const info = [this.data._id, e.target.value]
+      PubSub.publish('ListItemView:edit-completed', info);
 
     });
   };

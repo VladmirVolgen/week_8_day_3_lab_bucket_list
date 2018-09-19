@@ -23,6 +23,7 @@ ListView.prototype.handleList = function () {
 
 ListView.prototype.renderList = function (ul) {
   this.list.forEach((listItem) => {
+    console.log('List Item:', listItem);
     let item = new ListItemView(listItem, ul);
     item.render();
 

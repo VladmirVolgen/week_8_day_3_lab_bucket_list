@@ -9,19 +9,25 @@
     <title>My Bucket List</title>
   </head>
   <body>
+    <section>
+      <form id="form" action="index.html" method="post">
+        <label for="name"></label>
+        <input type="text" name="name" id="name">
 
-    <form id="form" action="index.html" method="post">
-      <label for="name"></label>
-      <input type="text" name="name" id="name">
+        <label for="completed"></label>
+        <select class="" name="completed" id="completed">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
 
-      <label for="completed"></label>
-      <select class="" name="completed" id="completed">
-        <option value="true">Yes</option>
-        <option value="false">No</option>
-      </select>
+        <input type="submit" value="save" id="save">
+      </form>
+    </section>
 
-      <input type="submit" value="save" id="save">
-    </form>
+
+    <section id="list">
+      
+    </section>
 
   </body>
 </html>
